@@ -15,6 +15,13 @@
 
   <body>
     <nav class="brand__top--sign">
+      <div class="modal">
+        <div class="modal__header">
+          <h2>Your favorites</h2>
+          <i class="fas fa-times modal__exit click" onclick="toggleModal()"></i>
+        </div>
+        <div class="favorites-list"></div>
+      </div>
       <div class="header--top">
         <h1>Enjoy home theatre</h1>
         <form class="form search--black">
@@ -23,11 +30,23 @@
         </form>
       </div>
     </nav>
-    <section id="movie--section" class="container">
-      <div class="movie-list main">
-        
+
+     
+
+    <section id="movie--section" class="container main">
+       <div class="range-slider">
+        <p>Sorty by rating: <span id="value"></span></p>
+        <input id="myRange" class="slider" value="1" min="1" max="10" step="1" type="range">
       </div>
+      <div class="movie-list"></div>
     </section>
+
+      <a href="#">
+          <button class="favorites_btn click" onclick="toggleModal()">
+          <i class="fas fa-heart"></i>
+          </button>
+      </a>
+
     <footer>
       <div class="footer__container">
         <div class="row footer__row">

@@ -1,6 +1,3 @@
-// function that gets API1, changes it into backend and adds to .user-list. Also make the array a string
-//function that makes an html element with the ${} thingie
-
 const popularURL =
   "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=3a6a4801c4e1409a0655b5db3e583c55";
 
@@ -10,6 +7,17 @@ const searchURL =
 const form = document.querySelector(".form");
 const search = document.querySelector(".search__field");
 const main = document.querySelector(".main");
+const favorites = document.querySelector(".favorites-list");
+
+let isModalOpen = false;
+
+function toggleModal() {
+  isModalOpen = !isModalOpen;
+  if (isModalOpen) {
+    return (document.body.classList += " modal--open");
+  }
+  document.body.classList.remove("modal--open");
+}
 
 async function getMovies(url) {
   const movies = await fetch(url);
@@ -18,6 +26,7 @@ async function getMovies(url) {
   movieListEl.innerHTML = moviesData.results
     .map((movie) => moviesHTML(movie))
     .join("");
+  console.log(moviesData);
 
   /*
     ONLY DISPLAY BETTER THAN 7.5
@@ -26,8 +35,9 @@ async function getMovies(url) {
           });
     */
 }
-
 getMovies(popularURL);
+
+function addFavorite(movie) {}
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -36,8 +46,6 @@ form.addEventListener("submit", (e) => {
   if (searchValue && searchValue !== "") {
     getMovies(searchURL + searchValue);
     searchValue = "";
-  } else {
-    window.location.reload();
   }
 });
 
@@ -45,11 +53,13 @@ function slideToMovies() {
   document.querySelector(".main").scrollIntoView();
 }
 
+/*
 function displayByRating() {
   if (rating > 7.5) {
     return "display-rating";
   }
 }
+*/
 
 function moviesHTML(movie) {
   return `<div class="movie-card" onclick="showUserPost()">
