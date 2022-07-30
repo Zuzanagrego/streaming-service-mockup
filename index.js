@@ -8,8 +8,32 @@ const form = document.querySelector(".form");
 const search = document.querySelector(".search__field");
 const main = document.querySelector(".main");
 const favorites = document.querySelector(".favorites-list");
+const slider = document.querySelector(".slider");
+const output = document.getElementById("value");
+const movieListEl = document.querySelector(".movie-list");
 
 let isModalOpen = false;
+let isFavorite = false;
+
+async function getMovies(url) {
+  const movies = await fetch(url);
+  const moviesData = await movies.json();
+
+  movieListEl.innerHTML = moviesData.results
+    .map((movie) => moviesHTML(movie))
+    .join("");
+
+  output.innerHTML = slider.value;
+  slider.oninput = function () {
+    output.innerHTML = this.value;
+    movieListEl.innerHTML = moviesData.results
+      .filter((movie) => movie.vote_average > this.value)
+      .map((movie) => moviesHTML(movie))
+      .join("");
+  };
+}
+
+getMovies(popularURL);
 
 function toggleModal() {
   isModalOpen = !isModalOpen;
@@ -18,26 +42,6 @@ function toggleModal() {
   }
   document.body.classList.remove("modal--open");
 }
-
-async function getMovies(url) {
-  const movies = await fetch(url);
-  const moviesData = await movies.json();
-  const movieListEl = document.querySelector(".movie-list");
-  movieListEl.innerHTML = moviesData.results
-    .map((movie) => moviesHTML(movie))
-    .join("");
-  console.log(moviesData);
-
-  /*
-    ONLY DISPLAY BETTER THAN 7.5
-            const rating = moviesData.results.map((movie) => {
-            return movie.vote_average;
-          });
-    */
-}
-getMovies(popularURL);
-
-function addFavorite(movie) {}
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -53,29 +57,45 @@ function slideToMovies() {
   document.querySelector(".main").scrollIntoView();
 }
 
-/*
-function displayByRating() {
-  if (rating > 7.5) {
-    return "display-rating";
+async function addToFavorites(id) {
+  //by clicking heart add to modal and remove from displaying
+  isFavorite = !isFavorite;
+  const movies = await fetch(popularURL);
+  const moviesData = await movies.json();
+  let movieId = id;
+
+  let favoriteMovies = moviesData.results.filter(
+    (movie) => movie.id == movieId
+  );
+
+  if (isFavorite) {
+    favoriteMovieEl = moviesHTML(favoriteMovies[0]);
+    favorites.innerHTML = favoriteMovieEl;
   }
+  //favoriteMovieEl.classList.remove("favorited");
+
+  favorites.innerHTML = favoriteMovieEl;
+
+  // favorites.removeChild(this);
+  //movie.classList.remove("favorited");
 }
-*/
 
 function moviesHTML(movie) {
-  return `<div class="movie-card" onclick="showUserPost()">
+  return `<div class="movie-card">
               <div class="movie-card__container">
                 <div class="movie-card__front">
                   <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}">
                 </div>
                 <div class="movie-card__back">
-                  <h2>${movie.original_title}</h2>
+                  <h2><i class="fas fa-heart click" onclick="addToFavorites(${movie.id})"></i> ${movie.original_title}</h2>
+                  <div>Rating: ${movie.vote_average}</div>
                   <div class="movie-card__back--plot">
                     <h3>
                     ${movie.overview}
                     </h3>
                    </div>
-                  <div class="btn btn--red">
-                    <a href="https://youtu.be/dQw4w9WgXcQ" target="_blank">Play here</a>
+                  <div class="btn">
+                    <a class="btn--red" href="https://youtu.be/dQw4w9WgXcQ" target="_blank">Play here</a>
                   </div>
                 </div>
               </div>

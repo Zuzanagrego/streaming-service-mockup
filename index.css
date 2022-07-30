@@ -49,6 +49,11 @@ a {
   padding-top: 16px;
 }
 
+.favorited .movie-list {
+  display: none;
+  z-index: -100;
+}
+
 /*
 HEAD
 */
@@ -247,13 +252,13 @@ MOVIES
   width: fit-content;
   text-transform: uppercase;
   background-color: red;
-  padding: 10px 15px;
+  padding: 5px 10px;
 }
 
 .btn--red a {
   text-decoration: none;
   color: black;
-  font-weight: 900;
+  font-size: 16px;
 }
 
 /*
