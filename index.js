@@ -63,7 +63,6 @@ async function addToFavorites(id) {
   const movies = await fetch(popularURL);
   const moviesData = await movies.json();
   let movieId = id;
-
   let favoriteMovies = moviesData.results.filter(
     (movie) => movie.id == movieId
   );
@@ -71,13 +70,13 @@ async function addToFavorites(id) {
   if (isFavorite) {
     favoriteMovieEl = moviesHTML(favoriteMovies[0]);
     favorites.innerHTML = favoriteMovieEl;
+  } else {
+    //favoriteMovieEl.classList.remove();
+    // favorites.removeChild(this);
+    //movie.classList.remove("favorited");
   }
-  //favoriteMovieEl.classList.remove("favorited");
 
   favorites.innerHTML = favoriteMovieEl;
-
-  // favorites.removeChild(this);
-  //movie.classList.remove("favorited");
 }
 
 function moviesHTML(movie) {
